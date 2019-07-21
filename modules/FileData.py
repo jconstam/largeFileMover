@@ -1,6 +1,4 @@
 import os
-import six
-import sys
 import hashlib
 
 class FileInfo:
