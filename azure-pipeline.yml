@@ -1,6 +1,16 @@
 pool:
   name: Hosted Ubuntu 1604
 
+trigger: 
+  branches:
+    include:
+    - master
+    - releases/
+    - feature/
+  paths:
+    include:
+    - '/'
+
 steps:
 - task: UsePythonVersion@0
   displayName: 'Use Python 2.7'
