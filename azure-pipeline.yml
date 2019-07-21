@@ -18,4 +18,3 @@ steps:
     versionSpec: 2.7
 - script: 'python largeFileMover.py'
   displayName: Run Script
-  continueOnError: true
