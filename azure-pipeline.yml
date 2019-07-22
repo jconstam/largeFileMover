@@ -20,5 +20,5 @@ steps:
   displayName: Create Test Environment
 - script: 'touch ./testing/test1.avi && touch ./testing/test2.mkv && touch ./testing/test3.jpg'
   displayName: Create Test Files
-- script: 'largeFileMover.py -r ./testing'
+- script: './largeFileMover.py -r ./testing'
   displayName: Run Script
