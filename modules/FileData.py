@@ -5,6 +5,7 @@ import hashlib
 
 class FileInfo:
     def __init__( self, filePath, fileSize = '', fileMD5 = None ):
+        self.hashSize = 1024 * 1024
         self.path = filePath
 
         if fileSize:
@@ -15,7 +16,7 @@ class FileInfo:
         if fileMD5:
             self.md5 = fileMD5
         else:
-            self.md5 = hashlib.md5( open( filePath, 'rb' ).read( ) ).hexdigest( )
+            self.md5 = hashlib.md5( open( filePath, 'rb' ).read( self.hashSize ) ).hexdigest( )
     
     def addToJSONData( self, jsonData ):
         jsonData[ self.md5 ] = {
@@ -29,6 +30,7 @@ class FileInfo:
 class FileData:
     def __init__( self ):
         self.fileList = []
+        self.fileExtensions = [ '.mkv', '.mp4', '.avi', '.ts', '.m4v', '.wmv', '.mpg', '.sfv', '.srr', '.rmvb' ]
 
     def findFiles( self, path ):
         print 'Searching for files in {0}'.format( path )
@@ -36,7 +38,8 @@ class FileData:
         for root, dirs, files in os.walk( os.path.abspath( path ) ):
             for file in files:
                 filePath = os.path.abspath( os.path.join( root, file ) )
-                if not '/.' in filePath:
+                fileName, fileExtension = os.path.splitext( filePath )
+                if not '/.' in filePath and fileExtension in self.fileExtensions:
                     file = FileInfo( filePath )
                     print '\tFound file {0} with size {1}'.format( file.path, file.size )
                     self.fileList.append( file )
