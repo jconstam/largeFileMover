@@ -16,5 +16,9 @@ steps:
   displayName: 'Use Python 2.7'
   inputs:
     versionSpec: 2.7
-- script: 'python largeFileMover.py'
+- script: 'mkdir -p ./testing'
+  displayName: Create Test Environment
+- script: 'touch ./testing/test1.avi && touch ./testing/test2.mkv && touch ./testing/test3.jpg'
+  displayName: Create Test Files
+- script: 'largeFileMover.py -r ./testing'
   displayName: Run Script
