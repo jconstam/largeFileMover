@@ -43,16 +43,16 @@ class FileData:
         return sorted( self.fileList.values( ), key=operator.attrgetter( 'size' ), reverse=True )
 
     def compare( self, other ):
-        both = []
-        thisOnly = []
-        otherOnly = []
+        both = {}
+        thisOnly = {}
+        otherOnly = {}
         for file in self.fileList.values( ):
             if file.md5 in self.fileList.keys( ) and file.md5 in other.fileList.keys( ):
-                both.append( file )
+                both[ file.md5 ] = file
             elif file.md5 in self.fileList.keys( ):
-                thisOnly.append( file )
+                thisOnly[ file.md5 ] = file
             elif file.md5 in other.fileList.key( ):
-                otherOnly.append( file )
+                otherOnly[ file.md5 ] = file
 
         return ( both, thisOnly, otherOnly )
 
