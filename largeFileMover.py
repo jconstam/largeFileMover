@@ -18,7 +18,6 @@ if __name__ == '__main__':
 
     data = FileData( )
     data.findFiles( args.rootPath )
-    data.sort( )
     data.writeFile( './testing/test.json' )
 
     exit( 0 )

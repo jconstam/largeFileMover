@@ -2,9 +2,10 @@ import os
 import sys
 import json
 import hashlib
+import operator
 
 class FileInfo:
-    def __init__( self, filePath, fileSize = '', fileMD5 = None ):
+    def __init__( self, filePath, fileSize = '', fileMD5 = '' ):
         self.hashSize = 1024 * 1024
         self.path = filePath
 
@@ -17,24 +18,18 @@ class FileInfo:
             self.md5 = fileMD5
         else:
             self.md5 = hashlib.md5( open( filePath, 'rb' ).read( self.hashSize ) ).hexdigest( )
-    
-    def addToJSONData( self, jsonData ):
-        jsonData[ self.md5 ] = {
-            'path': self.path,
-            'size': self.size
-        }
 
-    def __repr__( self ):
-        return '{0} - {1} - {2}'.format( self.path, self.size, self.md5 )
+    def getData( self ):
+        return { 'path': self.path, 'size': self.size, 'md5': self.md5 }
 
 class FileData:
     def __init__( self ):
-        self.fileList = []
+        self.fileList = {}
         self.fileExtensions = [ '.mkv', '.mp4', '.avi', '.ts', '.m4v', '.wmv', '.mpg', '.sfv', '.srr', '.rmvb' ]
 
     def findFiles( self, path ):
         print 'Searching for files in {0}'.format( path )
-        fileList = []
+        self.fileList = {}
         for root, dirs, files in os.walk( os.path.abspath( path ) ):
             for file in files:
                 filePath = os.path.abspath( os.path.join( root, file ) )
@@ -42,16 +37,16 @@ class FileData:
                 if not '/.' in filePath and fileExtension in self.fileExtensions:
                     file = FileInfo( filePath )
                     print '\tFound file {0} with size {1}'.format( file.path, file.size )
-                    self.fileList.append( file )
+                    self.fileList[ file.md5 ] = file
 
     def sort( self ):
-        self.fileList.sort( key=lambda file:file.size, reverse=True )
+        return sorted( self.fileList.values( ), key=operator.attrgetter( 'size' ), reverse=True )
 
     def writeFile( self, filePath ):
         fileData = {}
-        for file in self.fileList:
-            file.addToJSONData( fileData )
-        
+        for file in self.fileList.values( ):
+            fileData[ file.md5 ] = file.getData( )
+
         with open( filePath, 'w' ) as f:
             json.dump( fileData, f, indent=4 )
 
