@@ -42,6 +42,21 @@ class FileData:
     def sort( self ):
         return sorted( self.fileList.values( ), key=operator.attrgetter( 'size' ), reverse=True )
 
+    def compare( self, other ):
+        both = []
+        thisOnly = []
+        otherOnly = []
+        for file in self.fileList.values( ):
+            if file.md5 in self.fileList.keys( ) and file.md5 in other.fileList.keys( ):
+                both.append( file )
+            elif file.md5 in self.fileList.keys( ):
+                thisOnly.append( file )
+            elif file.md5 in other.fileList.key( ):
+                otherOnly.append( file )
+
+        return ( both, thisOnly, otherOnly )
+
+
     def writeFile( self, filePath ):
         fileData = {}
         for file in self.fileList.values( ):

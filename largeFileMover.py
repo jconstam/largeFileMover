@@ -18,6 +18,7 @@ if __name__ == '__main__':
 
     data = FileData( )
     data.findFiles( args.rootPath )
+    both, A, B = data.compare( data )
     data.writeFile( './testing/test.json' )
 
     exit( 0 )
