@@ -51,7 +51,8 @@ class FileData:
                 both[ file.md5 ] = file
             elif file.md5 in self.fileList.keys( ):
                 thisOnly[ file.md5 ] = file
-            elif file.md5 in other.fileList.key( ):
+        for file in other.fileList.values( ):
+            if not file.md5 in otherOnly:
                 otherOnly[ file.md5 ] = file
 
         return ( both, thisOnly, otherOnly )
